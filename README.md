@@ -1,4 +1,4 @@
-# tdse-tp4-pwm
+# tdse-tp4_02-pwm
 
 1. Forkear el repositorio y abrir el proyecto en STM32CubeIDE
 2. Analizar en el IOC las configuraciones del TIM3 y del RCC, sin modificarlas
