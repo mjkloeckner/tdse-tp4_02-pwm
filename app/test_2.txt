@@ -1,0 +1,14 @@
+En el test 2, se observa mediante la medición con osciloscopio que el ciclo de
+trabajo de la señal cuadrada permanece en 50%, sin embargo la frecuencia de la
+señal varía con el tiempo, esto se puede observar en las capturas
+`screenshot_4.png`, `screenshot_5.png` y `screenshot_6.png`, en los cuales en
+todos los casos el ciclo de trabajo es aproximadamente el mismo, pero cambia la
+frecuencia de la señal.
+
+Se ha observado que el LED presenta la misma intensidad a lo largo del tiempo. A
+diferencia del test 1, en el cual la parte activa del PWM variaba, en este caso
+es el periodo el cual varía con el tiempo, manteniendose el mismo ciclo de
+trabajo. En este caso, analizando el codigo se observa que el periodo se
+mentiene entre PERIOD/2 y PERIOD/4. Por tanto teniendo en cuenta que el System
+Clock es de 64MHz, se puede determinar las frecuencias limites de la funcion
+cuadrada del PWM. 64MHz/(PERIOD/2) = 1953Hz, y 64MHz/(PERIOD/2) = 3906Hz.

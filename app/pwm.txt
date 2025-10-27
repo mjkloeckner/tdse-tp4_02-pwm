@@ -1,0 +1,66 @@
+Para este proyecto se configura el Timer 3 del microcontrolador para generar una
+señal PWM. Para hablar de timers es necesario primero definir a que frecuencias 
+trabajan los periféricos y buses del microcontrolador.
+
+Los relojes del microcontrolador
+
+, en particular parte del código generado por CubeMX para inicializar
+el timer se encuentra en el archivo `main.c`, en la función `MX_TIM3_Init`. Para
+habl
+
+Eliminando comentarios utilizados por CubeMX, resulta en el código a
+continuación:
+
+```c
+static void MX_TIM3_Init(void)
+{
+    TIM_MasterConfigTypeDef sMasterConfig = {0};
+    TIM_OC_InitTypeDef sConfigOC = {0};
+
+    htim3.Instance = TIM3;
+    htim3.Init.Prescaler = 0;
+    htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim3.Init.Period = 65535;
+    htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+    if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+
+    if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+    {
+        Error_Handler();
+    }
+
+    sConfigOC.OCMode = TIM_OCMODE_PWM1;
+    sConfigOC.Pulse = 0;
+    sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+    if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+    {
+        Error_Handler();
+    }
+
+    HAL_TIM_MspPostInit(&htim3);
+}
+```
+
+Se configura el timer 3 para contar de manera ascendente de 0 a 65536, esto
+en conjunto con el reloj del timer define el período de la señal. El prescaler
+se configura en 0 por lo que el reloj del timer es el reloj del bus al que esta
+conectado, en el caso del timer 3, el bus es APB3, este cuenta con un reloj 
+
+
+```
+TIM_MasterConfigTypeDef sMasterConfig = {0};
+TIM_OC_InitTypeDef sConfigOC = {0};
+```
+
+Estas estructuras se usan para:
+
+* sMasterConfig: configurar opciones maestro-esclavo entre temporizadores.
+* sConfigOC: configurar parámetros del canal de salida (Output Compare / PWM).

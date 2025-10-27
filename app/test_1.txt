@@ -1,0 +1,28 @@
+Al ejecutar la funcion `test1_tick` se ha observado a traves del osciloscopio
+una señal cuadrada de una frecuencia de 1KHz (periodo de 1ms) y una amplitud
+aproximada de 3.3V, esto se puede ver en la captura del osciloscopio
+`screenshot_3.png`, en la medición de frecuencia y valor pico a pico (Vpp)
+respectivamante. Ademas se observa que a medida que varia el perioodo actvio de
+las señal PWM cambia el valor eficaz, y esto tiene sentido ya que la relacion
+entre el periodo de la señal aumento o disminuye en funcion del periodo activo
+de la señal, esto se puede observar en las cacpturas `screenshot_1.png` y
+`screenshot_3.png` en los cuales se muestra la salida pero para diferentes
+priodos activos de la señal. La relacion entre el periodo activo de la señal y
+el periodo de la misma se denomina ciclo de trabajo, y asi se muestra en las
+capturas del osciloscopio.
+
+A su vez, esta señal tiene una variación en el ciclo de trabajo, de 0% a 100% y
+luego nuevamente a 0%. Se observa que la variación del ciclo de trabajo es
+constante. Esto se ve en el codigo al establecer una variable llamada 'step' la
+cual se suma o resta al periodo activo del PWM. Luego se ha observado que la
+intensidad del LED varia con el tiempo, con un periodo aproximado entre 5 y 6
+segundos, este tiempo considera el LED apagado, luego encendido y finalmente
+apagado. Se ha observado que el SYSCLK es de 64MHz, y se ha establecido una
+variable estatica `period` a la que se asigna el valor 65535. Con esto podria
+determinarse que la frecuencia de la señal cuadrada es de aproximadamente 977Hz.
+Luego se ha observado que la variable estatica `step` la cual se asigna el valor
+100, que cada paso aumenta (o disminuye) la variable que funciona como contador
+`active`. Asimismo se ha observado que el PWM se actualiza cada 4 ticks, por
+tanto: (65535/100) = 655 llamadas a la funcion para completar un ciclo 977Hz/4 =
+244.25Hz frecuencia de actualizacion del pwn, por tanto: 655/244.25Hz = 2.68
+segundos para ir de 0% a 100% de ciclo de trabajo.
